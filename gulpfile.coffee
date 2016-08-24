@@ -5,6 +5,7 @@ concat = require 'gulp-concat'
 fs = require 'fs'
 gulp = require 'gulp'
 gulpif = require 'gulp-if'
+gutil = require 'gulp-util'
 mainBowerFiles = require 'main-bower-files'
 path = require 'path'
 rename = require 'gulp-rename'
@@ -90,19 +91,28 @@ gulp.task 'createmanage', ->
     .pipe rename 'manage.py'
     .pipe gulp.dest __dirname
 
-gulp.task 'createsettings', ->
-    secretKey = ''
-    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
-    for i in [1..50]
-        randomnumber = Math.floor Math.random() * chars.length
-        secretKey += chars[randomnumber]
-    gulp.src path.join __dirname, projectName, 'default_settings.py'
-    .pipe template
-        outputDirectoryBaseName: path.basename outputDirectory
-        projectName: projectName
-        secretKey: secretKey
-    .pipe rename 'settings.py'
-    .pipe gulp.dest outputDirectory
+gulp.task 'createsettings', (callback) ->
+    settingsPath = path.join outputDirectory, 'settings.py'
+    fs.access settingsPath, (error) ->
+        if error? and error.code is 'ENOENT'
+            secretKey = ''
+            chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+            for i in [1..50]
+                randomnumber = Math.floor Math.random() * chars.length
+                secretKey += chars[randomnumber]
+            gulp.src path.join __dirname, projectName, 'default_settings.py'
+            .pipe template
+                outputDirectoryBaseName: path.basename outputDirectory
+                projectName: projectName
+                secretKey: secretKey
+            .pipe rename 'settings.py'
+            .pipe gulp.dest outputDirectory
+            .on 'end', callback
+        else
+            gutil.log 'Task createsettings: Settings file does already exist. Skip task.'
+            callback error
+        return
+    return
 
 gulp.task 'createwsgifile', ->
     gulp.src path.join __dirname, projectName, 'default_wsgi.py'

@@ -1,8 +1,6 @@
 Draft of a website the for Dreifaltigkeitskirchgemeinde Leipzig
 ===============================================================
 
-Development environment with Ubuntu 14.04.
-
 ::
 
     $ python3 -m venv .virtualenv
