@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
-from <%= projectName %>.general_settings import *
+from <%= projectName %>.general_settings import *  # noqa
 
 
 # Quick-start development settings - unsuitable for production
@@ -66,3 +66,15 @@ else:
 # https://docs.djangoproject.com/en/1.9/topics/files/
 
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
+
+
+# Miscellaneous
+
+EVENT_TYPES = [
+    EventType(
+        db_value='default',
+        human_readable_value='Sonstige Veranstaltung',
+        human_readable_value_plural='Sonstige Veranstaltungen',
+        css_class_name_suffix='default',
+    ),
+]

@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
@@ -7,48 +9,10 @@ from django.core.validators import (
 )
 from django.db import models
 from django.utils.formats import localize
+from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext_lazy
 
-
-class EventType(models.Model):
-    """
-    Model for types of events like worship service, lecture, party etc.
-    """
-    COLOR_CHOICES = (
-        ('event-default', ugettext_lazy('Grau')),
-        ('event-primary', ugettext_lazy('Dunkelblau')),
-        ('event-success', ugettext_lazy('Grün')),
-        ('event-info', ugettext_lazy('Hellblau')),
-        ('event-warning', ugettext_lazy('Gelb')),
-        ('event-danger', ugettext_lazy('Rot')),
-    )
-
-    verbose_name = models.CharField(
-        ugettext_lazy('Name'),
-        max_length=255,
-    )
-
-    verbose_name_plural = models.CharField(
-        ugettext_lazy('Name (Plural)'),
-        max_length=255,
-    )
-
-    css_class_name = models.CharField(
-        ugettext_lazy('Farbe im Kalender'),
-        max_length=255,
-        choices=COLOR_CHOICES,
-        default='event-primary',
-        help_text=ugettext_lazy(
-            'Die Farben entsprechen den Farben für Buttons, Labels usw. bei '
-            'Twitter Bootstrap.'),
-    )
-
-
-    def __str__(self):
-        return '{name} ({color})'.format(
-            name=self.verbose_name_plural,
-            color=self.get_css_class_name_display(),
-        )
+from .utils import EventType
 
 
 class Event(models.Model):
@@ -57,9 +21,11 @@ class Event(models.Model):
 
     Every event belongs to one event type. See EventType.
     """
-    type = models.ForeignKey(
-        EventType,
-        verbose_name = ugettext_lazy('Veranstaltungstyp'),
+    type = models.CharField(
+        ugettext_lazy('Veranstaltungstyp'),
+        max_length=255,
+        choices=EventType.get_all_choices(),
+        default='default',
     )
 
     title = models.CharField(
@@ -178,7 +144,6 @@ class Page(models.Model):
         'self',
         verbose_name=ugettext_lazy('Elternelement'),
         null=True,
-        blank=True,
         help_text=ugettext_lazy(
             'Es ist die übergeordnete Seite auszuwählen. Unterseiten '
             'erscheinen im Menü nur bis zur dritten Ebene.'),
@@ -219,7 +184,10 @@ class Page(models.Model):
         verbose_name_plural = ugettext_lazy('Seiten')
 
     def __str__(self):
-        return self.title
+        result = ''
+        if self.parent is not None:
+            result = str(self.parent) + ' – '
+        return result + self.title
 
     def get_absolute_url(self):
         """
