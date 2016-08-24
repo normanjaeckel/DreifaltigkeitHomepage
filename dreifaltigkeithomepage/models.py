@@ -19,7 +19,7 @@ class Event(models.Model):
     """
     Model for events.
 
-    Every event belongs to one event type. See EventType.
+    Every event belongs to one event type. See .utils.EventType.
     """
     type = models.CharField(
         ugettext_lazy('Veranstaltungstyp'),

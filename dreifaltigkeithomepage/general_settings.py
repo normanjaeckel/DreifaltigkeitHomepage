@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'dreifaltigkeithomepage',
 ]
 
@@ -89,3 +90,12 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/1.9/topics/files/
 
 MEDIA_URL = '/media/'
+
+
+# Django REST framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
+}
