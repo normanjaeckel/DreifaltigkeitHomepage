@@ -4,6 +4,7 @@ cleanCSS = require 'gulp-cleancss'
 concat = require 'gulp-concat'
 fs = require 'fs'
 gulp = require 'gulp'
+coffee = require 'gulp-coffee'
 gulpif = require 'gulp-if'
 gutil = require 'gulp-util'
 mainBowerFiles = require 'main-bower-files'
@@ -65,7 +66,8 @@ gulp.task 'createsettings', (callback) ->
             .pipe gulp.dest outputDirectory
             .on 'end', callback
         else
-            gutil.log 'Task createsettings: Settings file does already exist. Skip task.'
+            gutil.log 'Task createsettings: Settings file does already exist.
+                Skip task.'
             callback error
         return
     return
@@ -82,7 +84,8 @@ gulp.task 'createwsgifile', (callback) ->
             .pipe gulp.dest outputDirectory
             .on 'end', callback
         else
-            gutil.log 'Task createwsgifile: Wsgi file does already exist. Skip task.'
+            gutil.log 'Task createwsgifile: Wsgi file does already exist. Skip
+                task.'
             callback error
         return
     return
@@ -99,9 +102,22 @@ gulp.task 'createmediadirectory', ['createsettings'], (callback) ->
 
 # CSS and font files
 
-gulp.task 'css', ['css-custom', 'css-libs', 'fonts-libs', 'maps-libs'], ->
+gulp.task 'css', [
+    'sass'
+    'css-extra'
+    'css-libs'
+    'fonts-libs'
+    'maps-libs'
+], ->
 
-gulp.task 'css-custom', ->
+gulp.task 'sass', ->
+
+gulp.task 'css-extra', ->
+    gulp.src path.join projectName, 'static', 'css', '*.css'
+    .pipe concat "#{projectName}-extra.css"
+    .pipe gulpif productionMode, cleanCSS
+        compatibility: 'ie8'
+    .pipe gulp.dest path.join staticDirectory, 'css'
 
 gulp.task 'css-libs', ->
     gulp.src mainBowerFiles
@@ -124,18 +140,39 @@ gulp.task 'maps-libs', ->
 
 # JavaScript files
 
-gulp.task 'js', ['coffee', 'js-custom', 'js-libs'], ->
+gulp.task 'js', [
+    'coffee'
+    'js-extra'
+    'js-libs'
+], ->
 
 gulp.task 'coffee', ->
+    gulp.src path.join projectName, 'scripts', '**', '*.coffee'
+    .pipe coffee()
+    .pipe concat "#{projectName}.js"
+    .pipe gulpif productionMode, uglify()
+    .pipe gulp.dest path.join outputDirectory, 'static', 'js'
 
-gulp.task 'js-custom', ->
+gulp.task 'js-extra', ->
+    gulp.src path.join projectName, 'static', 'js', '*.js'
+    .pipe concat "#{projectName}-extra.js"
+    .pipe gulpif productionMode, uglify()
+    .pipe gulp.dest path.join outputDirectory, 'static', 'js'
 
 gulp.task 'js-libs', ->
     isntSpecialFile = (file) ->
         name = path.basename file.path
-        name isnt 'html5shiv.js' and name isnt 'respond.src.js'
+        name isnt 'html5shiv.js' and name isnt 'respond.min.js'
     gulp.src mainBowerFiles
         filter: /\.js$/
     .pipe gulpif isntSpecialFile, concat "#{projectName}-libs.js"
     .pipe gulpif productionMode, uglify()
     .pipe gulp.dest path.join staticDirectory, 'js'
+
+
+# Helper tasks.
+
+gulp.task 'watch', ['coffee'], ->
+    gulp.watch path.join(projectName, 'scripts', '**', '*.coffee'),
+        ['coffee']
+    return

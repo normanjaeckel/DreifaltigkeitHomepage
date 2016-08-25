@@ -2,7 +2,28 @@
   "name": "dreifaltigkeithomepage",
   "private": true,
   "dependencies": {
+    "jquery": "^3.1.0",
+    "angular": "^1.5.8",
+    "angular-ui-router": "^0.3.1",
+    "bootstrap": "^3.3.7",
     "html5shiv": "^3.7.3",
     "respond": "^1.4.2"
+  },
+  "overrides": {
+    "bootstrap": {
+      "dependencies": {},
+      "main": [
+        "dist/css/bootstrap.css",
+        "dist/fonts/glyphicons-halflings-regular.eot",
+        "dist/fonts/glyphicons-halflings-regular.svg",
+        "dist/fonts/glyphicons-halflings-regular.ttf",
+        "dist/fonts/glyphicons-halflings-regular.woff",
+        "dist/fonts/glyphicons-halflings-regular.woff2",
+        "dist/js/bootstrap.js"
+      ]
+    },
+    "respond": {
+      "main": "dest/respond.min.js"
+    }
   }
 }
