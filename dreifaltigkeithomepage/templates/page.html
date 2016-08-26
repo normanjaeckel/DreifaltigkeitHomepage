@@ -1,7 +1,8 @@
 <div class="row">
 
-    <div class="col col-md-3">
+    <div class="col col-md-3" ng-controller="MenuCtrl as ctrl">
         <h1>Menü</h1>
+        <main-menu-tree element="ctrl.rootElement" slug="ctrl.slug"></main-menu-tree>
     </div>
 
     <div class="col col-md-9" ng-controller="PageCtrl as ctrl">
