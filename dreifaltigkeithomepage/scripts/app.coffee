@@ -1,4 +1,5 @@
 angular.module 'dreifaltigkeithomepage', [
+    'dreifaltigkeithomepage-templates'
     'ui.router'
 ]
 
@@ -16,8 +17,8 @@ angular.module 'dreifaltigkeithomepage', [
 
         # Set up the states
         $stateProvider
-        .state 'state1',
-            url: '/state1/'
-            templateUrl: 'partials/state1.html'
+        .state 'home',
+            url: '/'
+            templateUrl: 'home.html'
         return
 ]

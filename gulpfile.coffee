@@ -11,6 +11,7 @@ mainBowerFiles = require 'main-bower-files'
 path = require 'path'
 rename = require 'gulp-rename'
 template = require 'gulp-template'
+templateCache = require 'gulp-angular-templatecache'
 uglify = require 'gulp-uglify'
 
 
@@ -142,6 +143,7 @@ gulp.task 'maps-libs', ->
 
 gulp.task 'js', [
     'coffee'
+    'templates'
     'js-extra'
     'js-libs'
 ], ->
@@ -150,6 +152,15 @@ gulp.task 'coffee', ->
     gulp.src path.join projectName, 'scripts', '**', '*.coffee'
     .pipe coffee()
     .pipe concat "#{projectName}.js"
+    .pipe gulpif productionMode, uglify()
+    .pipe gulp.dest path.join outputDirectory, 'static', 'js'
+
+gulp.task 'templates', ->
+    gulp.src path.join projectName, 'templates', '**', '*.html'
+    .pipe templateCache "#{projectName}-templates.js",
+        module: "#{projectName}-templates"
+        standalone: true
+        moduleSystem: 'IIFE'
     .pipe gulpif productionMode, uglify()
     .pipe gulp.dest path.join outputDirectory, 'static', 'js'
 
@@ -172,7 +183,9 @@ gulp.task 'js-libs', ->
 
 # Helper tasks.
 
-gulp.task 'watch', ['coffee'], ->
+gulp.task 'watch', ['coffee', 'templates'], ->
     gulp.watch path.join(projectName, 'scripts', '**', '*.coffee'),
         ['coffee']
+    gulp.watch path.join(projectName, 'templates', '**', '*.html'),
+        ['templates']
     return

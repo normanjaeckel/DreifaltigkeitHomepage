@@ -18,6 +18,7 @@
     <link href="/static/css/dreifaltigkeithomepage.css" rel="stylesheet">
     <script src="/static/js/dreifaltigkeithomepage-libs.js"></script>
     <script src="/static/js/dreifaltigkeithomepage-extra.js"></script>
+    <script src="/static/js/dreifaltigkeithomepage-templates.js"></script>
     <script src="/static/js/dreifaltigkeithomepage.js"></script>
     <!-- HTML5 shiv and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -43,22 +44,14 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Termine</a></li>
             <li><a href="#">Kontakt</a></li>
-            <li><a ui-sref="state1">Impressum</a></li>
+            <li><a href="#">Impressum</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
-    <div ui-view></div>
-
     <div class="container">
-
-      <div class="starter-template">
-        <h1>Herzlich willkommen auf der Webseite der Dreifaltigkeitskirchgemeinde Leipzig.</h1>
-        <p class="lead">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-      </div>
-
+      <div ui-view></div>
     </div><!-- /.container -->
-
   </body>
 </html>
