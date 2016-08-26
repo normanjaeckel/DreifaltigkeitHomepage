@@ -12,7 +12,8 @@ class ProjectAppConfig(AppConfig):
 
     def ready(self):
         from .rest_api import router
-        from .views import EventViewSet, LosungenViewSet
+        from .views import EventViewSet, LosungenViewSet, PageViewSet
 
-        router.register(r'events', EventViewSet)
+        router.register(r'event', EventViewSet)
+        router.register(r'page', PageViewSet)
         router.register(r'losungen', LosungenViewSet, 'losungen')

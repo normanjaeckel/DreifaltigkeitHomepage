@@ -10,8 +10,8 @@ from django.views import generic
 from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
 
-from .models import Event
-from .serializers import EventSerializer
+from .models import Event, Page
+from .serializers import EventSerializer, PageSerializer
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -20,6 +20,14 @@ class EventViewSet(viewsets.ModelViewSet):
     """
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+
+class PageViewSet(viewsets.ModelViewSet):
+    """
+    Viewset for pages. See .models.Page.
+    """
+    queryset = Page.objects.all()
+    serializer_class = PageSerializer
 
 
 class LosungenViewSet(viewsets.ViewSet):

@@ -2,7 +2,6 @@ import datetime
 
 from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.formats import localize
@@ -186,15 +185,20 @@ class Page(models.Model):
             result = str(self.parent) + ' – '
         return result + self.title
 
-    def get_absolute_url(self):
+    @property
+    def path(self):
         """
-        Returns the URL to the page. Slugs of child and parent pages are
-        combined.
+        Returns the path to this page as list of objects with page ids and
+        page slugs starting with the root page. The last element is this
+        instance.
         """
-        url = reverse('page', args=[self.slug])
+        element = {'id': self.pk, 'slug': self.slug}
         if self.parent is not None:
-            url = self.parent.get_absolute_url()[:-1] + url
-        return url
+            path = self.parent.path
+            path.append(element)
+        else:
+            path = [element]
+        return path
 
     def clean(self):
         """

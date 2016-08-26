@@ -1,6 +1,9 @@
 angular.module 'dreifaltigkeithomepage', [
-    'dreifaltigkeithomepage-templates'
+    'js-data'
     'ui.router'
+    'dreifaltigkeithomepage-templates'
+    'dreifaltigkeithomepage.home'
+    'dreifaltigkeithomepage.page'
 ]
 
 .config [
@@ -20,21 +23,34 @@ angular.module 'dreifaltigkeithomepage', [
         .state 'home',
             url: '/'
             templateUrl: 'home.html'
+        .state 'page',
+            url: '/{slug:any}/'
+            templateUrl: 'page.html'
         return
 ]
 
+.config [
+    'DSHttpAdapterProvider'
+    (DSHttpAdapterProvider) ->
+        angular.extend DSHttpAdapterProvider.defaults,
+            basePath: '/api'
+]
 
-.controller 'LosungenCtrl', [
-    '$http'
-    ($http) ->
-        $http.get '/api/losungen'
-        .then(
-            (success) =>
-                @losungen = success.data
-                return
-            (error) ->
-                console.error error
-                return
-        )
-        return
+
+.factory 'Page', [
+    'DS'
+    (DS) ->
+        DS.defineResource
+            name: 'page/'
+            methods:
+                getSlug: () ->
+                    slug = ''
+                    angular.forEach @path, (element) ->
+                        slug += '/' + element.slug
+                    slug.slice(1)
+]
+
+.run [
+    'Page'
+    (Page) ->
 ]
