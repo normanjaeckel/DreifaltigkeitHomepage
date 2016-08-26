@@ -71,7 +71,7 @@ angular.module 'dreifaltigkeithomepage.page', []
             () =>
                 @rootElement =
                     page: {}
-                    children: PageTree.getTree pages
+                    children: PageTree.getTree Page.getAll()
                 return
         )
         return
