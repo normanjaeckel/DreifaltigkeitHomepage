@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
-from <%= projectName %>.general_settings import *  # noqa
+from <%= projectName %>.general_settings import *  # noqa: E225,E999
+from <%= projectName %>.utils import EventType  # noqa: E225,E999
 
 
 # Quick-start development settings - unsuitable for production
@@ -41,9 +42,11 @@ DATABASES = {
     }
 }
 
+# Install psycopg2 for PostgreSQL support.
+#
 # DATABASES = {
 #    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Requires psycopg2
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #        'NAME': '...',
 #        'USER': '...',
 #        'PASSWORD': '...',

@@ -21,6 +21,12 @@ To setup a local development version run::
     $ python manage.py createsuperuser
     $ python manage.py runserver
 
+To check coding styles run::
+
+    $ pip install flake8 isort
+    $ flake8 dreifaltigkeithomepage
+    $ isort --check-only --recursive dreifaltigkeithomepage
+
 
 Credits
 -------

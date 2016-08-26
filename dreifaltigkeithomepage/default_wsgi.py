@@ -18,7 +18,7 @@ import os
 # site.addsitedir(os.path.join(
 #     BASE_DIR, '.virtualenv', 'lib', 'python3.4', 'site-packages'))
 
-from django.core.wsgi import get_wsgi_application
+from django.core.wsgi import get_wsgi_application  # isort:skip
 
 os.environ.setdefault(
     'DJANGO_SETTINGS_MODULE',

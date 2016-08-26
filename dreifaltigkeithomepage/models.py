@@ -3,10 +3,7 @@ import datetime
 from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
-from django.core.validators import (
-    MaxValueValidator,
-    MinValueValidator,
-)
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.formats import localize
 from django.utils.translation import ugettext as _

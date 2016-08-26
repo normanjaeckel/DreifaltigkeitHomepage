@@ -1,8 +1,9 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from .rest_api import router
 from . import views
+from .rest_api import router
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
