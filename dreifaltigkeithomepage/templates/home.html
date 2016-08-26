@@ -1,0 +1,15 @@
+<div class="starter-template">
+    <h1>Herzlich willkommen auf der Webseite der Dreifaltigkeitskirchgemeinde Leipzig.</h1>
+    <p class="lead">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+</div>
+
+<div ng-controller="LosungenCtrl as ctrl">
+    <h2>Die Losungen</h2>
+    <dl>
+        <dt>Losungstext {{ ctrl.losungen.Datum }}</dt>
+        <dd>{{ ctrl.losungen.Losungstext }} <small>{{ ctrl.losungen.Losungsvers }}</small></dd>
+        <dt>Lehrtext {{ ctrl.losungen.Datum }}</dt>
+        <dd>{{ ctrl.losungen.Lehrtext }} <small>{{ ctrl.losungen.Lehrtextvers }}</small></dd>
+    </dl>
+    <p><a href="http:// www.herrnhuter.de">&copy; Evangelische Brüder-Unität – Herrnhuter Brüdergemeine</a> | <a href="http://www.losungen.de">Weitere Informationen finden Sie hier.</a></p>
+</div>

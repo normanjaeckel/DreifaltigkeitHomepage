@@ -12,6 +12,7 @@ class ProjectAppConfig(AppConfig):
 
     def ready(self):
         from .rest_api import router
-        from .views import EventViewSet
+        from .views import EventViewSet, LosungenViewSet
 
         router.register(r'events', EventViewSet)
+        router.register(r'losungen', LosungenViewSet, 'losungen')

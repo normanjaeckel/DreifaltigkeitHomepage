@@ -22,3 +22,19 @@ angular.module 'dreifaltigkeithomepage', [
             templateUrl: 'home.html'
         return
 ]
+
+
+.controller 'LosungenCtrl', [
+    '$http'
+    ($http) ->
+        $http.get '/api/losungen'
+        .then(
+            (success) =>
+                @losungen = success.data
+                return
+            (error) ->
+                console.error error
+                return
+        )
+        return
+]
