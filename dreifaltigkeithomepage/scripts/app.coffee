@@ -17,7 +17,7 @@ angular.module 'dreifaltigkeithomepage', [
         # Set up the states
         $stateProvider
         .state 'state1',
-            url: '/state1'
+            url: '/state1/'
             templateUrl: 'partials/state1.html'
         return
 ]

@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy
 
@@ -16,11 +17,12 @@ class MediaFileAdmin(admin.ModelAdmin):
     pass
 
 
+description = ugettext_lazy('{app_name} Administration').format(
+    app_name=apps.get_app_config('dreifaltigkeithomepage').verbose_name)
+
 site_instance = admin.site
-site_instance.site_title = ugettext_lazy(
-    'Dreifaltigkeitskirchgemeinde Administration')
-site_instance.site_header = ugettext_lazy(
-    'Dreifaltigkeitskirchgemeinde Administration')
+site_instance.site_title = description
+site_instance.site_header = description
 
 site_instance.register(Event, EventAdmin)
 site_instance.register(Page, PageAdmin)

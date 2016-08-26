@@ -13,7 +13,7 @@ node_modules/
 
 # Files processed by several tools
 manage.py
-dreifalthomeDeploy/
+deployDreifaltigkeithomepage/
 
 # Private development data
 private/

@@ -20,7 +20,7 @@ productionMode = argv.production
 
 projectName = 'dreifaltigkeithomepage'
 
-outputDirectory = path.join __dirname, 'dreifalthomeDeploy'
+outputDirectory = path.join __dirname, 'deployDreifaltigkeithomepage'
 
 staticDirectory = path.join outputDirectory, 'static'
 
