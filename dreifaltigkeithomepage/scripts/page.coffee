@@ -1,5 +1,41 @@
 angular.module 'dreifaltigkeithomepage.page', []
 
+.config [
+    '$stateProvider'
+    ($stateProvider) ->
+        $stateProvider
+        .state 'page',
+            url: '/{slug:any}/'
+            templateUrl: 'page.html'
+            resolve:
+                page: [
+                    '$q'
+                    '$stateParams'
+                    'Event'
+                    'EventType'
+                    'Page'
+                    'SlugParser'
+                    ($q, $stateParams, Event, EventType, Page, SlugParser) ->
+                        slug = SlugParser.getSlug $stateParams
+                        params =
+                            where:
+                                slug:
+                                    '===': slug
+                        promises = [
+                            Page.findAll params
+                            .then(
+                                () ->
+                                    pages = Page.filter params
+                                    pages[0]
+                            )
+                            Event.findAll()  # TODO: Do not load all but only required events.
+                            EventType.findAll()  # TODO: Do not load all but only required event types.
+                        ]
+                        $q.all promises
+                ]
+        return
+]
+
 .factory 'SlugParser', [
     () ->
         getSlug: (stateParams) ->
@@ -64,7 +100,6 @@ angular.module 'dreifaltigkeithomepage.page', []
     'PageTree'
     ($scope, $stateParams, Page, SlugParser, PageTree) ->
         @slug = SlugParser.getSlug $stateParams
-        Page.findAll()
         $scope.$watch(
             () ->
                 Page.lastModified()
@@ -80,21 +115,21 @@ angular.module 'dreifaltigkeithomepage.page', []
 .controller 'PageCtrl', [
     '$scope'
     '$stateParams'
+    'Event'
+    'EventType'
     'Page'
     'SlugParser'
-    ($scope, $stateParams, Page, SlugParser) ->
-        slug = SlugParser.getSlug $stateParams
-        params =
-            where:
-                slug:
-                    '===': slug
-        Page.findAll(params)
+    ($scope, $stateParams, Event, EventType, Page, SlugParser) ->
+        page = $scope.$parent.$resolve.page[0]
+        events = $scope.$parent.$resolve.events
         $scope.$watch(
             () ->
-                Page.lastModified()
+                Page.lastModified(page.id)
             () =>
-                pages = Page.filter params
-                @page = pages[0]
+                @page = page
+                if @page.type is 'event'
+                    @events = @page.getEvents()
+                    @eventType = EventType.get @page.event_type
                 return
         )
         return

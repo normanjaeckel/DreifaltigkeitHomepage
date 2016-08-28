@@ -1,5 +1,15 @@
 angular.module 'dreifaltigkeithomepage.home', []
 
+.config [
+    '$stateProvider'
+    ($stateProvider) ->
+        $stateProvider
+        .state 'home',
+            url: '/'
+            templateUrl: 'home.html'
+        return
+]
+
 .controller 'LosungenCtrl', [
     '$http'
     ($http) ->

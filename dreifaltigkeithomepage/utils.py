@@ -22,6 +22,23 @@ class EventType:
         """
         return self.db_value, self.human_readable_value
 
+    @property
+    def data(self):
+        return {
+            'db_value': self.db_value,
+            'human_readable_value': self.human_readable_value,
+            'human_readable_value_plural': self.human_readable_value_plural,
+            'css_class_name': self.css_class_name,
+        }
+
+    @classmethod
+    def get_all(self):
+        """
+        Returns an iterable of all event types that are configured in the
+        settings (EVENT_TYPES). The result can be used in the API.
+        """
+        return (event_type.data for event_type in settings.EVENT_TYPES)
+
     @classmethod
     def get_all_choices(cls):
         """

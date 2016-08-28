@@ -8,25 +8,14 @@ angular.module 'dreifaltigkeithomepage', [
 
 .config [
     '$locationProvider'
-    '$stateProvider'
     '$urlRouterProvider'
-    ($locationProvider, $stateProvider, $urlRouterProvider) ->
+    ($locationProvider, $urlRouterProvider) ->
 
         # Uses HTML5 mode for location in browser address bar
         $locationProvider.html5Mode true
 
         # For any unmatched url, redirect to /
         $urlRouterProvider.otherwise '/'
-
-        # Set up the states
-        $stateProvider
-        .state 'home',
-            url: '/'
-            templateUrl: 'home.html'
-        .state 'page',
-            url: '/{slug:any}/'
-            templateUrl: 'page.html'
-        return
 ]
 
 .config [
@@ -37,9 +26,25 @@ angular.module 'dreifaltigkeithomepage', [
 ]
 
 
-.factory 'Page', [
+.factory 'Event', [
     'DS'
     (DS) ->
+        DS.defineResource
+            name: 'event/'
+]
+
+.factory 'EventType', [
+    'DS'
+    (DS) ->
+        DS.defineResource
+            name: 'eventtype/'
+            idAttribute: 'db_value'
+]
+
+.factory 'Page', [
+    'DS'
+    'Event'
+    (DS, Event) ->
         DS.defineResource
             name: 'page/'
             methods:
@@ -48,9 +53,17 @@ angular.module 'dreifaltigkeithomepage', [
                     angular.forEach @path, (element) ->
                         slug += '/' + element.slug
                     slug.slice(1)
+                getEvents: () ->
+                    params =
+                        where:
+                            type:
+                                '===': @event_type
+                    Event.filter params
 ]
 
 .run [
+    'Event'
+    'EventType'
     'Page'
-    (Page) ->
+    (Event, EventType, Page) ->
 ]

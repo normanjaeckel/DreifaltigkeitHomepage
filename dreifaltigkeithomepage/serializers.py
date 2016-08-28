@@ -33,6 +33,7 @@ class PageSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'type',
+            'event_type',
             'slug',
             'path',
             'title',

@@ -12,6 +12,7 @@ from rest_framework.response import Response
 
 from .models import Event, Page
 from .serializers import EventSerializer, PageSerializer
+from .utils import EventType
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -28,6 +29,19 @@ class PageViewSet(viewsets.ModelViewSet):
     """
     queryset = Page.objects.all()
     serializer_class = PageSerializer
+
+
+class EventTypeViewSet(viewsets.ViewSet):
+    """
+    View for all event types.
+    """
+    permission_classes = (permissions.AllowAny,)
+
+    def list(self, request, format=None):
+        """
+        Returns a list of all event types.
+        """
+        return Response(EventType.get_all())
 
 
 class LosungenViewSet(viewsets.ViewSet):

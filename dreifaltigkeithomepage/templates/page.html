@@ -9,6 +9,18 @@
         <h1>Seiteninhalt</h1>
         <h2>{{ ctrl.page.title }}</h2>
         {{ ctrl.page.content }}
+
+        <div ng-show="ctrl.events">
+            <h2>{{ ctrl.eventType.human_readable_value_plural }}</h2>
+            <p ng-show="ctrl.events.length == 0">Derzeit keine ...</p>
+            <ul ng-repeat="event in ctrl.events">
+                <li>
+                    <p>{{ event.title }}</p>
+                    <p>{{ event.begin }}</p>
+                </li>
+            </ul>
+        </div>
+
     </div>
 
 </div>
