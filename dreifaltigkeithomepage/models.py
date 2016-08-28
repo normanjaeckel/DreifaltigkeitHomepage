@@ -111,6 +111,15 @@ class Page(models.Model):
         default='flat',
     )
 
+    event_type = models.CharField(
+        ugettext_lazy('Veranstaltungstyp'),
+        max_length=255,
+        choices=EventType.get_all_choices(),
+        blank=True,
+        null=True,
+        # TODO: help_text=ugettext_lazy('...'),
+    )
+
     slug = models.SlugField(
         ugettext_lazy('Slug/URL'),
         unique=True,
@@ -202,7 +211,10 @@ class Page(models.Model):
 
     def clean(self):
         """
-        Checks parent field to prevent hierarchical loops.
+        Checks several fields.
+
+        Checks parent field to prevent hierarchical loops. Checks that
+        event_type field is not None only if the page type is 'event'.
         """
         super().clean()
         ancestor = self.parent
@@ -212,6 +224,16 @@ class Page(models.Model):
                     'Fehler: Es darf keine zirkuläre Hierarchie erstellt '
                     'werden. Wählen Sie ein anderes Elternelement.'))
             ancestor = ancestor.parent
+        if self.type == 'event':
+            if self.event_type is None:
+                raise ValidationError(_(
+                    'Fehler: Bei Seiten vom Typ Veranstaltungsseite muss ein '
+                    'Veranstaltungstyp ausgewählt werden.'))
+        else:
+            if self.event_type is not None:
+                raise ValidationError(_(
+                    'Fehler: Bei Seiten, die keine Veranstaltungsseiten sind, '
+                    'darf kein Veranstaltungstyp ausgewählt werden.'))
 
 
 class MediaFile(models.Model):
