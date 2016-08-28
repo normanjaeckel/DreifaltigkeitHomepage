@@ -24,6 +24,9 @@
         "dist/js/bootstrap.js"
       ]
     },
+    "html5shiv": {
+      "main": "dist/html5shiv.min.js"
+    },
     "respond": {
       "main": "dest/respond.min.js"
     }

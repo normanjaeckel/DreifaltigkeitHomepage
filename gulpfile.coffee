@@ -7,9 +7,11 @@ gulp = require 'gulp'
 coffee = require 'gulp-coffee'
 gulpif = require 'gulp-if'
 gutil = require 'gulp-util'
+lazypipe = require 'lazypipe'
 mainBowerFiles = require 'main-bower-files'
 path = require 'path'
 rename = require 'gulp-rename'
+sourcemaps = require 'gulp-sourcemaps'
 template = require 'gulp-template'
 templateCache = require 'gulp-angular-templatecache'
 uglify = require 'gulp-uglify'
@@ -108,14 +110,15 @@ gulp.task 'css', [
     'css-extra'
     'css-libs'
     'fonts-libs'
-    'maps-libs'
 ], ->
 
 gulp.task 'sass', ->
 
 gulp.task 'css-extra', ->
     gulp.src path.join projectName, 'static', 'css', '*.css'
+    .pipe sourcemaps.init()
     .pipe concat "#{projectName}-extra.css"
+    .pipe sourcemaps.write()
     .pipe gulpif productionMode, cleanCSS
         compatibility: 'ie8'
     .pipe gulp.dest path.join staticDirectory, 'css'
@@ -123,7 +126,9 @@ gulp.task 'css-extra', ->
 gulp.task 'css-libs', ->
     gulp.src mainBowerFiles
         filter: /\.css$/
+    .pipe sourcemaps.init()
     .pipe concat "#{projectName}-libs.css"
+    .pipe sourcemaps.write()
     .pipe gulpif productionMode, cleanCSS
         compatibility: 'ie8'
     .pipe gulp.dest path.join staticDirectory, 'css'
@@ -132,11 +137,6 @@ gulp.task 'fonts-libs', ->
     gulp.src mainBowerFiles
         filter: /\.(eot)|(svg)|(ttf)|(woff)|(woff2)$/
     .pipe gulp.dest path.join staticDirectory, 'fonts'
-
-gulp.task 'maps-libs', ->
-    gulp.src mainBowerFiles
-        filter: /\.map$/
-    .pipe gulp.dest path.join staticDirectory, 'css'
 
 
 # JavaScript files
@@ -150,8 +150,10 @@ gulp.task 'js', [
 
 gulp.task 'coffee', ->
     gulp.src path.join projectName, 'scripts', '**', '*.coffee'
+    .pipe sourcemaps.init()
     .pipe coffee()
     .pipe concat "#{projectName}.js"
+    .pipe sourcemaps.write()
     .pipe gulpif productionMode, uglify()
     .pipe gulp.dest path.join outputDirectory, 'static', 'js'
 
@@ -166,17 +168,23 @@ gulp.task 'templates', ->
 
 gulp.task 'js-extra', ->
     gulp.src path.join projectName, 'static', 'js', '*.js'
+    .pipe sourcemaps.init()
     .pipe concat "#{projectName}-extra.js"
+    .pipe sourcemaps.write()
     .pipe gulpif productionMode, uglify()
     .pipe gulp.dest path.join outputDirectory, 'static', 'js'
 
 gulp.task 'js-libs', ->
     isntSpecialFile = (file) ->
         name = path.basename file.path
-        name isnt 'html5shiv.js' and name isnt 'respond.min.js'
+        name isnt 'html5shiv.min.js' and name isnt 'respond.min.js'
+    concatChannel = lazypipe()
+        .pipe sourcemaps.init
+        .pipe concat, "#{projectName}-libs.js"
+        .pipe sourcemaps.write
     gulp.src mainBowerFiles
         filter: /\.js$/
-    .pipe gulpif isntSpecialFile, concat "#{projectName}-libs.js"
+    .pipe gulpif isntSpecialFile, concatChannel()
     .pipe gulpif productionMode, uglify()
     .pipe gulp.dest path.join staticDirectory, 'js'
 
