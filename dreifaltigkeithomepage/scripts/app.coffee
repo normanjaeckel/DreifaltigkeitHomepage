@@ -3,6 +3,7 @@ angular.module 'dreifaltigkeithomepage', [
     'ui.router'
     'dreifaltigkeithomepage-templates'
     'dreifaltigkeithomepage.home'
+    'dreifaltigkeithomepage.event'
     'dreifaltigkeithomepage.page'
 ]
 

@@ -10,7 +10,7 @@ angular.module 'dreifaltigkeithomepage.home', []
         return
 ]
 
-.controller 'LosungenCtrl', [
+.controller 'HomeLosungenCtrl', [
     '$http'
     ($http) ->
         $http.get '/api/losungen/'
@@ -25,7 +25,7 @@ angular.module 'dreifaltigkeithomepage.home', []
         return
 ]
 
-.controller 'MainLinksCtrl', [
+.controller 'HomeMainLinksCtrl', [
     '$scope'
     'Page'
     ($scope, Page) ->
@@ -44,7 +44,7 @@ angular.module 'dreifaltigkeithomepage.home', []
         return
 ]
 
-.controller 'EventsCtrl', [
+.controller 'HomeEventsCtrl', [
     '$scope'
     'Event'
     ($scope, Event) ->

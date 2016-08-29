@@ -28,6 +28,7 @@ angular.module 'dreifaltigkeithomepage.page', []
                                     pages = Page.filter params
                                     pages[0]
                             )
+                            Page.findAll()  # TODO: Do not load all. What do we need for the main menu?
                             Event.findAll()  # TODO: Do not load all but only required events.
                             EventType.findAll()  # TODO: Do not load all but only required event types.
                         ]
@@ -84,7 +85,7 @@ angular.module 'dreifaltigkeithomepage.page', []
             element: '='
             slug: '='
         template: '<a ui-sref="page({ slug: element.page.getSlug() })">{{ element.page.title }}</a> ' +
-                  '<span ng-show="element.page.slug === slug">*</span>' +
+                  '<span ng-show="slug && element.page.slug === slug">*</span>' +
                   '<ul>' +
                     '<li ng-repeat="child in element.children">' +
                       '<main-menu-tree element="child" slug="slug"></main-menu-tree>' +
@@ -99,13 +100,15 @@ angular.module 'dreifaltigkeithomepage.page', []
     'SlugParser'
     'PageTree'
     ($scope, $stateParams, Page, SlugParser, PageTree) ->
-        @slug = SlugParser.getSlug $stateParams
+        if $stateParams.slug
+            @slug = SlugParser.getSlug $stateParams
         $scope.$watch(
             () ->
                 Page.lastModified()
             () =>
                 @rootElement =
-                    page: {}
+                    page:
+                        getSlug: () ->  # Empty function to avoid error in directive template
                     children: PageTree.getTree Page.getAll()
                 return
         )
