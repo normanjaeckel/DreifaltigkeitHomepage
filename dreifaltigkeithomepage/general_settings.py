@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'rest_framework',
     'dreifaltigkeithomepage',
 ]
@@ -23,6 +24,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+BASE_URL = '/'  # Custom settings for sitemaps definition.
 
 ROOT_URLCONF = 'dreifaltigkeithomepage.urls'
 

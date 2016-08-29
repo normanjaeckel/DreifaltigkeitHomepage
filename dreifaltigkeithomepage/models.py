@@ -1,5 +1,6 @@
 import datetime
 
+from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -193,6 +194,18 @@ class Page(models.Model):
         if self.parent is not None:
             result = str(self.parent) + ' – '
         return result + self.title
+
+    def get_absolute_url(self):
+        """
+        Returns the URL to the page. Slugs of child and parent pages are
+        combined.
+        """
+        url = '{}/'.format(self.slug)
+        if self.parent is not None:
+            url = self.parent.get_absolute_url() + url
+        else:
+            url = settings.BASE_URL + url
+        return url
 
     @property
     def path(self):
