@@ -43,3 +43,22 @@ angular.module 'dreifaltigkeithomepage.home', []
         )
         return
 ]
+
+.controller 'EventsCtrl', [
+    '$scope'
+    'Event'
+    ($scope, Event) ->
+        params =
+            where:
+                on_home_before_begin:
+                    '>': 0
+        Event.findAll(params)
+        $scope.$watch(
+            () ->
+                Event.lastModified()
+            () =>
+                @events = Event.filter params
+                return
+        )
+        return
+]

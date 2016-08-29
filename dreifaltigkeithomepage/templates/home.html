@@ -22,3 +22,14 @@
         </div>
     </div>
 </div>
+
+<div ng-controller="EventsCtrl as ctrl">
+    <h2>Aktuelle Veranstaltungen</h2>
+    <div class="row">
+        <div class="col col-md-4" ng-repeat="event in ctrl.events">
+            <p><a>{{ event.title }}</a></p>
+            <p>{{ event.begin }}</p>
+            <p>{{ event.get_type_display }}</p>
+        </div>
+    </div>
+</div>
